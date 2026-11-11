@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Drum Kit Engine</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!--
+    CONTRACT
+    Mỗi pad PHẢI có:
+      data-key   = KeyboardEvent.code (ví dụ "KeyA")
+      data-sound = đường dẫn file âm thanh
+    Đổi phím = chỉ sửa data-key. Không đụng JS.
+  -->
+    <header class="page-header">
+      <h1>Production Studio Drum Kit</h1>
+      <p>Use the A–L keys or focus a pad and press Enter or Space.</p>
+    </header>
+    <main class="kit">
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyA" data-sound="sounds/clap.wav">
+        <kbd>A</kbd><span>Clap</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyS" data-sound="sounds/hihat.wav">
+        <kbd>S</kbd><span>Hi-hat</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyD" data-sound="sounds/kick.wav">
+        <kbd>D</kbd><span>Kick</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyF" data-sound="sounds/openhat.wav">
+        <kbd>F</kbd><span>Open hat</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyG" data-sound="sounds/boom.wav">
+        <kbd>G</kbd><span>Boom</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyH" data-sound="sounds/ride.wav">
+        <kbd>H</kbd><span>Ride</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyJ" data-sound="sounds/snare.wav">
+        <kbd>J</kbd><span>Snare</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyK" data-sound="sounds/tom.wav">
+        <kbd>K</kbd><span>Tom</span>
+      </button>
+      <button class="pad" type="button" aria-pressed="false" data-key="KeyL" data-sound="sounds/tink.wav">
+        <kbd>L</kbd><span>Tink</span>
+      </button>
+    </main>
+
+    <section class="controls" aria-label="Recording controls">
+      <button id="rec" type="button">Record</button>
+      <button id="stop" type="button" disabled>Stop</button>
+      <button id="play" type="button" disabled>Play</button>
+      <span id="status" role="status" aria-live="polite">Idle</span>
+    </section>
+
+    <section class="feedback" aria-label="Visual performance feedback">
+      <div class="history-panel">
+        <h2>Recent hits</h2>
+        <p id="hit-empty">Play a drum pad to see the hit history.</p>
+        <ol id="hit-log" role="log" aria-live="polite" aria-relevant="additions" aria-atomic="false"></ol>
+      </div>
+      <div class="meter-panel">
+        <h2>Activity</h2>
+        <div class="activity-meter" aria-hidden="true">
+          <span class="meter-bar"></span><span class="meter-bar"></span>
+          <span class="meter-bar"></span><span class="meter-bar"></span>
+          <span class="meter-bar"></span><span class="meter-bar"></span>
+          <span class="meter-bar"></span><span class="meter-bar"></span>
+          <span class="meter-bar"></span><span class="meter-bar"></span>
+          <span class="meter-bar"></span><span class="meter-bar"></span>
+        </div>
+      </div>
+    </section>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

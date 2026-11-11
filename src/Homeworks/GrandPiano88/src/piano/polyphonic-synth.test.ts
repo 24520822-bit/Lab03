@@ -12,6 +12,8 @@ function createAudioContextMock() {
   }> = [];
   const gains: Array<{
     gain: {
+      value: number;
+      cancelScheduledValues: ReturnType<typeof vi.fn>;
       setValueAtTime: ReturnType<typeof vi.fn>;
       exponentialRampToValueAtTime: ReturnType<typeof vi.fn>;
       setTargetAtTime: ReturnType<typeof vi.fn>;
@@ -37,6 +39,8 @@ function createAudioContextMock() {
     createGain: vi.fn(() => {
       const gain = {
         gain: {
+          value: 0,
+          cancelScheduledValues: vi.fn(),
           setValueAtTime: vi.fn(),
           exponentialRampToValueAtTime: vi.fn(),
           setTargetAtTime: vi.fn(),
@@ -78,9 +82,38 @@ describe('PolyphonicSynth', () => {
     synth.noteOn(68);
 
     expect(synth.activeVoiceCount).toBe(8);
-    expect(gains[0].gain.setTargetAtTime).toHaveBeenCalledWith(0.0001, 2.04, 0.025);
-    expect(oscillators[0].stop).toHaveBeenCalledWith(2.19);
-    expect(oscillators[8].start).toHaveBeenCalledOnce();
+    expect(gains[0].gain.setTargetAtTime).toHaveBeenCalledWith(0.0001, 2, 0.005);
+    expect(oscillators[0].stop).toHaveBeenCalledWith(2.02);
+    expect(oscillators[8].start).toHaveBeenCalledWith(2.02);
+  });
+
+  it('uses a release-tail voice slot before starting a replacement note', () => {
+    const { context, oscillators, gains } = createAudioContextMock();
+    const synth = new PolyphonicSynth(context);
+
+    for (let midi = 60; midi < 68; midi += 1) synth.noteOn(midi);
+    synth.noteOff(60);
+    synth.noteOn(68);
+
+    expect(gains[0].gain.setTargetAtTime).toHaveBeenLastCalledWith(0.0001, 2, 0.005);
+    expect(oscillators[0].stop).toHaveBeenLastCalledWith(2.02);
+    expect(oscillators[8].start).toHaveBeenCalledWith(2.02);
+    expect(synth.activeVoiceCount).toBe(8);
+  });
+
+  it('keeps rapid replacement notes within the eight scheduled voice slots', () => {
+    const { context, oscillators } = createAudioContextMock();
+    const synth = new PolyphonicSynth(context);
+
+    for (let midi = 60; midi < 76; midi += 1) synth.noteOn(midi);
+
+    expect(synth.activeVoiceCount).toBe(8);
+    for (const oscillator of oscillators.slice(0, 8)) {
+      expect(oscillator.stop).toHaveBeenCalledWith(2.02);
+    }
+    for (const oscillator of oscillators.slice(8)) {
+      expect(oscillator.start).toHaveBeenCalledWith(2.02);
+    }
   });
 
   it('ramps a released voice down before stopping its oscillator', () => {
@@ -105,8 +138,8 @@ describe('PolyphonicSynth', () => {
     synth.stopAll();
 
     expect(synth.activeVoiceCount).toBe(0);
-    expect(oscillators[0].stop).toHaveBeenCalledWith(2.19);
-    expect(oscillators[1].stop).toHaveBeenCalledWith(2.19);
+    expect(oscillators[0].stop).toHaveBeenCalledWith(2.02);
+    expect(oscillators[1].stop).toHaveBeenCalledWith(2.02);
   });
 
   it('rejects invalid MIDI notes and frequencies before creating voices', () => {

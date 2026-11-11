@@ -89,22 +89,24 @@
 - Create: `src/Homeworks/GrandPiano88/src/piano/PianoKeyboard.tsx`
 - Create: `src/Homeworks/GrandPiano88/src/piano/PianoApp.tsx`
 - Create: `src/Homeworks/GrandPiano88/src/piano/PianoKeyboard.test.tsx`
+- Create: `src/Homeworks/GrandPiano88/src/piano/PianoApp.test.tsx`
 
 **Interfaces:**
 - `PianoKey` is `memo`-wrapped and receives a MIDI number, label, `isBlack`, `isPressed`, and stable note-start/note-end callbacks. The start callback records the `midiToFrequency` value and passes it to the synthesizer.
 - `PianoKeyboard` receives generated `PianoNote[]`, pressed MIDI state, and shared note callbacks; each key receives only its own `isPressed` boolean, not the full pressed set. An optional `onProfileKeyRender(midi)` callback wraps each key in a React `Profiler` only for the render-isolation test; the app omits it.
 - `PianoApp` owns synthesizer, recorder, and replay cancellation lifecycle. Stop and React effect cleanup abort replay and call `stopAll`.
+- `PianoApp` accepts optional audio-context and clock factories for deterministic lifecycle/recording tests; production defaults to browser `AudioContext` and `performance.now()`.
 
-- [ ] **Step 1: Add React 19, React DOM 19, and matching type packages to the nested package manifest; set TypeScript `jsx` to `react-jsx`.** Update the lockfile with the package manager after the manifest change.
-- [ ] **Step 2: Write UI tests** asserting 88 buttons, correct white/black counts, accessible labels/pressed state, and per-key Profiler counts that change only for the pressed key.
-- [ ] **Step 3: Run `npm test -- src/piano/PianoKeyboard.test.tsx` and confirm the new tests fail.**
-- [ ] **Step 4: Implement `PianoKey` and `PianoKeyboard`.** Use stable callbacks and primitive per-key props so `React.memo` prevents unrelated keys from rendering again.
-- [ ] **Step 5: Run the keyboard tests and confirm key generation and render isolation pass.**
-- [ ] **Step 6: Implement `PianoApp` controls for recording, Stop, replay, and the 0.5×/1×/2× selector.** Connect pointer and keyboard press/release, record only live input, and prevent replay from being recorded again.
-- [ ] **Step 7: Add the React mount point to `app.ts` and mount `PianoApp` from `main.ts` without removing the existing URL queue or visualizer.**
-- [ ] **Step 8: Add responsive piano-key styling in the existing stylesheet and document the piano controls and replay behavior in `README.md`.**
-- [ ] **Step 9: Run the full nested-project checks: `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build`.** Confirm the pre-existing queue/visualizer tests still pass.
-- [ ] **Step 10: Commit** as `feat: integrate memoized React piano UI`.
+- [x] **Step 1: Add React 19, React DOM 19, and matching type packages to the nested package manifest; set TypeScript `jsx` to `react-jsx`.** Update the lockfile with the package manager after the manifest change.
+- [x] **Step 2: Write UI tests** asserting 88 buttons, correct white/black counts, accessible labels/pressed state, per-key Profiler counts that change only for the pressed key, and Stop/unmount cancellation.
+- [x] **Step 3: Run `npm test -- src/piano/PianoKeyboard.test.tsx` and confirm the new tests fail.**
+- [x] **Step 4: Implement `PianoKey` and `PianoKeyboard`.** Use stable callbacks and primitive per-key props so `React.memo` prevents unrelated keys from rendering again.
+- [x] **Step 5: Run the keyboard tests and confirm key generation and render isolation pass.**
+- [x] **Step 6: Implement `PianoApp` controls for recording, Stop, replay, and the 0.5×/1×/2× selector.** Connect pointer and keyboard press/release, record only live input, and prevent replay from being recorded again.
+- [x] **Step 7: Add the React mount point to `app.ts` and mount `PianoApp` from `main.ts` without removing the existing URL queue or visualizer.**
+- [x] **Step 8: Add responsive piano-key styling in the existing stylesheet and document the piano controls and replay behavior in `README.md`.**
+- [x] **Step 9: Run the full nested-project checks: `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build`.** Confirm the pre-existing queue/visualizer tests still pass.
+- [x] **Step 10: Commit** as `feat: integrate memoized React piano UI`.
 
 ## Proposed Commit Map
 

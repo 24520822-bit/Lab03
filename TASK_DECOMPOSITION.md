@@ -66,14 +66,14 @@
 - Produce `PianoSequenceRecorder` with `start(): void`, `noteOn(midi: number, freq: number, now?: number): void`, `noteOff(midi: number, now?: number): void`, `stop(): void`, and `getEvents(): readonly RecordedNote[]`.
 - Produce `replaySequence(events, speed, synth, signal): Promise<void>`, where `synth` provides `noteOn(midi, freq)` and `noteOff(midi)`. Replay waits `deltaMs / speed` between note-ons and releases each note after `durationMs / speed`; simultaneous notes may overlap. Resolve only after the final note's release completes.
 
-- [ ] **Step 1: Write recorder tests** for FIFO event order, first-event delta, onset-to-onset `deltaMs`, and note-on-to-note-off `durationMs`.
-- [ ] **Step 2: Run `npm test -- src/piano/sequence.test.ts` and confirm the new tests fail.**
-- [ ] **Step 3: Implement `PianoSequenceRecorder` in `src/piano/sequence.ts`.**
-- [ ] **Step 4: Write replay tests** for all three speeds, overlapping note durations, and abort while waiting (no subsequent note-on).
-- [ ] **Step 5: Run the replay tests and confirm they fail before implementation.**
-- [ ] **Step 6: Implement `replaySequence` with abort-aware waits and cleanup of scheduled note releases.** On abort, reject with an `AbortError`; the caller is responsible for `synth.stopAll()`.
-- [ ] **Step 7: Run `npm test -- src/piano/sequence.test.ts` and confirm all recorder/replay tests pass.**
-- [ ] **Step 8: Commit** as `feat: add FIFO piano recording and replay`.
+- [x] **Step 1: Write recorder tests** for FIFO event order, first-event delta, onset-to-onset `deltaMs`, and note-on-to-note-off `durationMs`.
+- [x] **Step 2: Run `npm test -- src/piano/sequence.test.ts` and confirm the new tests fail.**
+- [x] **Step 3: Implement `PianoSequenceRecorder` in `src/piano/sequence.ts`.**
+- [x] **Step 4: Write replay tests** for all three speeds, overlapping note durations, and abort while waiting (no subsequent note-on).
+- [x] **Step 5: Run the replay tests and confirm they fail before implementation.**
+- [x] **Step 6: Implement `replaySequence` with abort-aware waits and cleanup of scheduled note releases.** On abort, reject with an `AbortError`; the caller is responsible for `synth.stopAll()`.
+- [x] **Step 7: Run `npm test -- src/piano/sequence.test.ts` and confirm all recorder/replay tests pass.**
+- [x] **Step 8: Commit** as `feat: add FIFO piano recording and replay`.
 
 ### Task 3: Integrate the Memoized React Piano UI
 
